@@ -11,5 +11,6 @@ namespace Api.Context
 
         public DbSet<Produto> Produto { get; set; }
         public DbSet<Usuario> Usuario { get; set; }
+        public DbSet<TrocarSenha> TrocarSenha { get; set; }
     }
 }

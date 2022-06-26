@@ -1,8 +1,10 @@
 ﻿using Api.Context;
 using Api.Models;
 using Api.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace Api.Controllers
 {
@@ -59,9 +61,10 @@ namespace Api.Controllers
             if (user.Password.Length < 5)
                 return BadRequest(new { errors = "Senha deve ter no mínimo 5 caracteres" });
 
-            var findUser = await _contexto.Usuario.FirstOrDefaultAsync(u => u.UserName.Equals(user.UserName));
+            var findUser = await _contexto.Usuario.FirstOrDefaultAsync(
+                u => u.UserName.Equals(user.UserName) || u.Email.Equals(user.Email));
             if (findUser != null)
-                return BadRequest(new { errors = "Usuário já existe!" });
+                return BadRequest(new { errors = "Usuário ou E-mail já existe!" });
             else
             {
                 user.Password = EncriptPassword(user.Password);
@@ -81,5 +84,6 @@ namespace Api.Controllers
 
             return hash;
         }
+
     }
 }
